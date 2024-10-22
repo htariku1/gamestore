@@ -1,0 +1,30 @@
+type Invoice {
+    invoiceId: ID!
+    name: String!
+    street: String
+    city: String!
+    state: String!
+    zipcode: String
+    itemType: String!
+    itemId: Int!
+    unitPrice: Float!
+    quantity: Int!
+    subtotal: Float!
+    tax: Float!
+    processingFee: Float!
+    total: Float!
+}
+
+type Mutation {
+    createInvoice(
+        name: String!,
+        street: String,
+        city: String!,
+        state: String!,
+        zipcode: String,
+        itemType: String!,
+        itemId: Int!,
+        unitPrice: Float!,
+        quantity: Int!
+    ): Invoice!
+}

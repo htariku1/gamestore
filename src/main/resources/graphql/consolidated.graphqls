@@ -1,0 +1,14 @@
+# Query definition for all resources (consoles, games, t-shirts, etc.)
+type Query {
+    consoles: [Console]
+    consoleById(id: ID!): Console
+
+    games: [Game]
+    gameById(id: ID!): Game
+
+    tshirts: [TShirt]
+    tshirtById(id: ID!): TShirt
+
+     invoices: [Invoice!]!
+     invoiceById(invoiceId: ID!): Invoice
+}

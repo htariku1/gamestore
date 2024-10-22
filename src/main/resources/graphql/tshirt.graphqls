@@ -1,0 +1,9 @@
+# TShirt type definition
+type TShirt {
+    id: ID!
+    size: String!
+    color: String!
+    description: String!
+    price: Float!
+    quantity: Int!
+}
