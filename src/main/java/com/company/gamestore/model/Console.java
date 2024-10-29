@@ -9,21 +9,23 @@ public class Console {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int consoleId;
+    private Integer consoleId;
 
     private String model;
     private String manufacturer;
     private String memoryAmount;
     private String processor;
     private BigDecimal price;
-    private int quantity;
+    private Integer quantity;
+    private String category;
 
     // Getters and Setters
-    public int getConsoleId() {
+
+    public Integer getConsoleId() {
         return consoleId;
     }
 
-    public void setConsoleId(int consoleId) {
+    public void setConsoleId(Integer consoleId) {
         this.consoleId = consoleId;
     }
 
@@ -67,11 +69,19 @@ public class Console {
         this.price = price;
     }
 
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

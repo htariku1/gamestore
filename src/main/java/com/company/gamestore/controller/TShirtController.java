@@ -5,6 +5,7 @@ import com.company.gamestore.service.TShirtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class TShirtController {
     private TShirtService tshirtService;
 
     @PostMapping
-    public ResponseEntity<TShirt> createTShirt(@RequestBody TShirt tshirt) {
+    public ResponseEntity<TShirt> createTShirt(@RequestBody @Valid TShirt tshirt) {
         return ResponseEntity.ok(tshirtService.createTShirt(tshirt));
     }
 
@@ -47,7 +48,7 @@ public class TShirtController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TShirt> updateTShirt(@PathVariable int id, @RequestBody TShirt tshirt) {
+    public ResponseEntity<TShirt> updateTShirt(@PathVariable int id, @RequestBody @Valid TShirt tshirt) {
         return ResponseEntity.ok(tshirtService.updateTShirt(id, tshirt));
     }
 }

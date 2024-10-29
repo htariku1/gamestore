@@ -1,0 +1,46 @@
+type Game {
+    gameId: ID!
+    title: String!
+    esrbRating: String!
+    description: String!
+    price: Float!
+    studio: String!
+    quantity: Int!
+    category: String!
+}
+
+type Console {
+    consoleId: ID!
+    model: String!
+    manufacturer: String!
+    memoryAmount: String
+    processor: String
+    price: Float!
+    quantity: Int!
+    category: String!
+}
+
+type Accessory {
+    accessoryId: ID!
+    name: String!
+    description: String!
+    price: Float!
+    quantity: Int!
+    category: String!
+    subCategory: String!
+}
+
+type Query {
+    gamesByCategory(category: String): [Game]
+    gamesByCriteria(title: String, esrbRating: String, studio: String): [Game]
+    games: [Game]
+
+    consolesByCategory(category: String): [Console]
+    consolesByManufacturer(manufacturer: String): [Console]
+    consoles: [Console]
+
+    accessoriesByCategory(category: String): [Accessory]
+    accessoriesBySubCategory(subCategory: String): [Accessory]
+    accessoriesByCategoryAndSubCategory(category: String, subCategory: String): [Accessory]
+    accessories: [Accessory]
+}

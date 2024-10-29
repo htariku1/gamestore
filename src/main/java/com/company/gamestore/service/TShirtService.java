@@ -41,4 +41,18 @@ public class TShirtService {
         tshirt.setTshirtId(id);
         return tshirtRepository.save(tshirt);
     }
+    public List<TShirt> getTShirtsByCriteria(String color, String size) {
+        if ((color == null || color.isEmpty()) &&
+                (size == null || size.isEmpty())) {
+            return tshirtRepository.findAll();
+        } else if ((color != null && !color.isEmpty()) &&
+                (size != null && !size.isEmpty())) {
+            return tshirtRepository.findByColorAndSize(color, size);
+        } else if (color != null && !color.isEmpty()) {
+            return tshirtRepository.findByColor(color);
+        } else {
+            return tshirtRepository.findBySize(size);
+        }
+    }
+
 }

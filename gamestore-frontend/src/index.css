@@ -1,0 +1,10 @@
+@import "@fontsource/nunito-sans"; /* Import the font */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles */
+body {
+  @apply font-sans text-gray-800 bg-background;
+}

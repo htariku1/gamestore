@@ -25,9 +25,6 @@ public class ConsoleService {
         return consoleRepository.findAll();
     }
 
-    public List<Console> getConsolesByManufacturer(String manufacturer) {
-        return consoleRepository.findByManufacturer(manufacturer);
-    }
 
     public void deleteConsole(int id) {
         consoleRepository.deleteById(id);
@@ -36,5 +33,17 @@ public class ConsoleService {
     public Console updateConsole(int id, Console console) {
         console.setConsoleId(id);
         return consoleRepository.save(console);
+    }
+
+    public List<Console> getConsolesByManufacturer(String manufacturer) {
+        if (manufacturer == null || manufacturer.isEmpty()) {
+            return consoleRepository.findAll();
+        } else {
+            return consoleRepository.findByManufacturerContainingIgnoreCase(manufacturer);
+        }
+    }
+
+    public List<Console> getConsolesByCategory(String category) {
+        return consoleRepository.findByCategory(category);
     }
 }

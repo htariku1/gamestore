@@ -45,4 +45,26 @@ public class GameService {
         game.setGameId(id);
         return gameRepository.save(game);
     }
+
+
+    public List<Game> getGamesByCriteria(String title, String esrbRating, String studio) {
+        if ((title == null || title.isEmpty()) &&
+                (esrbRating == null || esrbRating.isEmpty()) &&
+                (studio == null || studio.isEmpty())) {
+            // If no criteria is provided, return all games
+            return gameRepository.findAll();
+        } else {
+            // If any criteria is provided, perform a filtered search
+            return gameRepository.findByTitleContainingIgnoreCaseAndEsrbRatingContainingIgnoreCaseAndStudioContainingIgnoreCase(
+                    title != null ? title : "",
+                    esrbRating != null ? esrbRating : "",
+                    studio != null ? studio : ""
+            );
+        }
+    }
+    public List<Game> getGamesByCategory(String category) {
+        return gameRepository.findByCategory(category);
+    }
+
+
 }

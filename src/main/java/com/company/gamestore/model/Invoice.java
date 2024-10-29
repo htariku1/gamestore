@@ -1,6 +1,7 @@
 package com.company.gamestore.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
 
 @Entity
@@ -9,16 +10,39 @@ public class Invoice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int invoiceId;
+    private Integer invoiceId;
+
+    @NotBlank(message = "Name is required")
+    @Size(max = 50)
     private String name;
+
+    @Size(max = 100)
     private String street;
+
+    @NotBlank(message = "City is required")
+    @Size(max = 50)
     private String city;
+
+    @NotBlank(message = "State is required")
+    @Size(min = 2, max = 2, message = "State must be 2 characters")
     private String state;
+
+    @Size(max = 10)
     private String zipcode;
+
+    @NotBlank(message = "Item type is required")
+    @Pattern(regexp = "Game|Console|T-Shirt", message = "Item type must be 'Game', 'Console', or 'T-Shirt'")
     private String itemType;
-    private int itemId;
+
+    @NotNull(message = "Item ID is required")
+    private Integer itemId;
+
     private BigDecimal unitPrice;
-    private int quantity;
+
+    @NotNull(message = "Quantity is required")
+    @Min(value = 1, message = "Quantity must be at least 1")
+    private Integer quantity;
+
     private BigDecimal subtotal;
     private BigDecimal tax;
     private BigDecimal processingFee;
@@ -26,11 +50,12 @@ public class Invoice {
 
     // Getters and Setters
 
-    public int getInvoiceId() {
+
+    public Integer getInvoiceId() {
         return invoiceId;
     }
 
-    public void setInvoiceId(int invoiceId) {
+    public void setInvoiceId(Integer invoiceId) {
         this.invoiceId = invoiceId;
     }
 
@@ -82,11 +107,11 @@ public class Invoice {
         this.itemType = itemType;
     }
 
-    public int getItemId() {
+    public Integer getItemId() {
         return itemId;
     }
 
-    public void setItemId(int itemId) {
+    public void setItemId(Integer itemId) {
         this.itemId = itemId;
     }
 
@@ -98,11 +123,11 @@ public class Invoice {
         this.unitPrice = unitPrice;
     }
 
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 
@@ -137,5 +162,4 @@ public class Invoice {
     public void setTotal(BigDecimal total) {
         this.total = total;
     }
-
 }

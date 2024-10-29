@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ConsoleRepository extends JpaRepository<Console, Integer> {
     List<Console> findByManufacturer(String manufacturer);
+    List<Console> findByManufacturerContainingIgnoreCase(String manufacturer);
+    List<Console> findByCategory(String category);
 }

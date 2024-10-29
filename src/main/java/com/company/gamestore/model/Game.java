@@ -9,21 +9,23 @@ public class Game {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int gameId;
+    private Integer gameId;
 
     private String title;
     private String esrbRating;
     private String description;
     private BigDecimal price;
     private String studio;
-    private int quantity;
+    private Integer quantity;
+    private String category;
 
     // Getters and Setters
-    public int getGameId() {
+
+    public Integer getGameId() {
         return gameId;
     }
 
-    public void setGameId(int gameId) {
+    public void setGameId(Integer gameId) {
         this.gameId = gameId;
     }
 
@@ -67,11 +69,19 @@ public class Game {
         this.studio = studio;
     }
 
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

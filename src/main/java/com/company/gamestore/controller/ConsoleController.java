@@ -5,6 +5,7 @@ import com.company.gamestore.service.ConsoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class ConsoleController {
     private ConsoleService consoleService;
 
     @PostMapping
-    public ResponseEntity<Console> createConsole(@RequestBody Console console) {
+    public ResponseEntity<Console> createConsole(@RequestBody @Valid Console console) {
         return ResponseEntity.ok(consoleService.createConsole(console));
     }
 
@@ -42,7 +43,12 @@ public class ConsoleController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Console> updateConsole(@PathVariable int id, @RequestBody Console console) {
+    public ResponseEntity<Console> updateConsole(@PathVariable int id, @RequestBody @Valid Console console) {
         return ResponseEntity.ok(consoleService.updateConsole(id, console));
+    }
+
+    @GetMapping("/category/{category}")
+    public List<Console> getConsolesByCategory(@PathVariable String category) {
+        return consoleService.getConsolesByCategory(category);
     }
 }

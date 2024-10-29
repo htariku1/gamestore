@@ -5,6 +5,7 @@ import com.company.gamestore.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -15,8 +16,9 @@ public class GameController {
     @Autowired
     private GameService gameService;
 
+
     @PostMapping
-    public ResponseEntity<Game> createGame(@RequestBody Game game) {
+    public ResponseEntity<Game> createGame(@RequestBody @Valid Game game) {
         return ResponseEntity.ok(gameService.createGame(game));
     }
 
@@ -52,7 +54,12 @@ public class GameController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Game> updateGame(@PathVariable int id, @RequestBody Game game) {
+    public ResponseEntity<Game> updateGame(@PathVariable int id, @RequestBody @Valid Game game) {
         return ResponseEntity.ok(gameService.updateGame(id, game));
+    }
+
+    @GetMapping("/category/{category}")
+    public List<Game> getGamesByCategory(@PathVariable String category) {
+        return gameService.getGamesByCategory(category);
     }
 }
