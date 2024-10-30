@@ -1,3 +1,5 @@
+// src/App.js
+
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -8,12 +10,13 @@ import Accessories from './components/Accessories';
 import Cart from './components/Cart';
 import Footer from './components/Footer';
 import ContactUs from './components/ContactUs';
+import Login from './components/Login';
 
 function App() {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
-      <main className="flex-grow">
+      <main className="flex-grow mt-16">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/games" element={<Games />} />
@@ -23,6 +26,8 @@ function App() {
           <Route path="/accessories" element={<Accessories />} />
           <Route path="/accessories/:subCategory" element={<Accessories />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/login" element={<Login />} />
+          {/* Other routes */}
         </Routes>
       </main>
       <ContactUs />

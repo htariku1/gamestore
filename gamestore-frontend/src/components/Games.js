@@ -1,50 +1,55 @@
 // src/components/Games.js
 
-import React, { useState } from 'react';
-import { useQuery, gql } from '@apollo/client';
-import GameCard from './GameCard';
+import React, { useContext } from 'react';
+import { useParams } from 'react-router-dom';
+import { gql, useQuery } from '@apollo/client';
+import { CartContext } from '../contexts/CartContext';
 
-const GET_GAMES_BY_CATEGORY = gql`
-  query GetGamesByCategory($category: String) {
+const GAMES_QUERY = gql`
+  query GetGames($category: String) {
     gamesByCategory(category: $category) {
       gameId
       title
       description
       price
+      studio
     }
   }
 `;
 
 function Games() {
-  const [category, setCategory] = useState(null);
-
-  const { loading, error, data } = useQuery(GET_GAMES_BY_CATEGORY, {
+  const { category } = useParams();
+  const { loading, error, data } = useQuery(GAMES_QUERY, {
     variables: { category },
-    skip: !category, // Skip query until a category is selected
   });
+  const { addToCart } = useContext(CartContext);
 
-  const handleCategoryClick = (selectedCategory) => {
-    setCategory(selectedCategory);
-  };
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error fetching games</p>;
+
+  const games = data.gamesByCategory;
 
   return (
-    <div className="max-w-screen-xl mx-auto p-4">
-      <h2 className="text-2xl font-semibold mb-4">Games</h2>
-      <div className="flex space-x-4 mb-6">
-        <button onClick={() => handleCategoryClick("Action")} className="btn-category">Action</button>
-        <button onClick={() => handleCategoryClick("Adventure")} className="btn-category">Adventure</button>
-        <button onClick={() => handleCategoryClick("Sports")} className="btn-category">Sports</button>
+    <div className="container mx-auto my-10 mt-24">
+      <h2 className="text-2xl font-bold mb-5">
+        {category ? `${category} Games` : 'All Games'}
+      </h2>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {games.map((game) => (
+          <div key={game.gameId} className="border p-4 rounded shadow">
+            <h3 className="text-xl font-semibold">{game.title}</h3>
+            <p className="text-gray-600">{game.description}</p>
+            <p className="text-gray-800">Studio: {game.studio}</p>
+            <p className="text-gray-800 font-bold">Price: ${game.price.toFixed(2)}</p>
+            <button
+              onClick={() => addToCart({ ...game, quantity: 1 })}
+              className="mt-2 bg-primary text-white px-4 py-2 rounded"
+            >
+              Add to Cart
+            </button>
+          </div>
+        ))}
       </div>
-
-      {loading && <p>Loading games...</p>}
-      {error && <p>Error loading games.</p>}
-      {data && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {data.gamesByCategory.map((game) => (
-            <GameCard key={game.gameId} game={game} />
-          ))}
-        </div>
-      )}
     </div>
   );
 }

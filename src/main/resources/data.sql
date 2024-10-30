@@ -70,3 +70,21 @@ INSERT INTO accessory (name, description, price, quantity, category, sub_categor
     ('Bose QuietComfort Ultra Headphones', 'Noise-cancelling over-ear headphones', 379.00, 60, 'Accessories', 'Headsets'),
     ('SanDisk USB Type-C Dual Drive, 512 GB, Black', 'High-speed USB Type-C storage', 89.99, 120, 'Accessories', 'Storage'),
     ('Seagate One Touch SSD 2TB External SSD Portable', 'Fast external SSD storage', 199.99, 80, 'Accessories', 'Storage');
+
+-- Create users table
+CREATE TABLE IF NOT EXISTS users (
+    user_id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+-- Create user_roles table
+CREATE TABLE IF NOT EXISTS user_roles (
+    user_id INT NOT NULL,
+    role VARCHAR(50) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+-- Optionally, insert an admin user
+INSERT INTO users (username, password) VALUES ('admin', '$2a$10$hashedPassword'); -- Use bcrypt hashed password
+INSERT INTO user_roles (user_id, role) VALUES (1, 'ADMIN');

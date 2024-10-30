@@ -1,11 +1,12 @@
 // src/components/Consoles.js
 
-import React, { useState } from 'react';
-import { useQuery, gql } from '@apollo/client';
-import ConsoleCard from './ConsoleCard';
+import React, { useContext } from 'react';
+import { useParams } from 'react-router-dom';
+import { gql, useQuery } from '@apollo/client';
+import { CartContext } from '../contexts/CartContext';
 
-const GET_CONSOLES_BY_CATEGORY = gql`
-  query GetConsolesByCategory($category: String) {
+const CONSOLES_QUERY = gql`
+  query GetConsoles($category: String) {
     consolesByCategory(category: $category) {
       consoleId
       model
@@ -16,35 +17,37 @@ const GET_CONSOLES_BY_CATEGORY = gql`
 `;
 
 function Consoles() {
-  const [category, setCategory] = useState(null);
-
-  const { loading, error, data } = useQuery(GET_CONSOLES_BY_CATEGORY, {
+  const { category } = useParams();
+  const { loading, error, data } = useQuery(CONSOLES_QUERY, {
     variables: { category },
-    skip: !category,
   });
+  const { addToCart } = useContext(CartContext);
 
-  const handleCategoryClick = (selectedCategory) => {
-    setCategory(selectedCategory);
-  };
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error fetching consoles</p>;
+
+  const consoles = data.consolesByCategory;
 
   return (
-    <div className="max-w-screen-xl mx-auto p-4">
-      <h2 className="text-2xl font-semibold mb-4">Consoles</h2>
-      <div className="flex space-x-4 mb-6">
-        <button onClick={() => handleCategoryClick("PlayStation")} className="btn-category">PlayStation</button>
-        <button onClick={() => handleCategoryClick("Xbox")} className="btn-category">Xbox</button>
-        <button onClick={() => handleCategoryClick("Nintendo")} className="btn-category">Nintendo</button>
+    <div className="container mx-auto my-10 mt-24">
+      <h2 className="text-2xl font-bold mb-5">
+        {category ? `${category} Consoles` : 'All Consoles'}
+      </h2>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {consoles.map((console) => (
+          <div key={console.consoleId} className="border p-4 rounded shadow">
+            <h3 className="text-xl font-semibold">{console.model}</h3>
+            <p className="text-gray-800">Manufacturer: {console.manufacturer}</p>
+            <p className="text-gray-800 font-bold">Price: ${console.price.toFixed(2)}</p>
+            <button
+              onClick={() => addToCart({ ...console, quantity: 1 })}
+              className="mt-2 bg-primary text-white px-4 py-2 rounded"
+            >
+              Add to Cart
+            </button>
+          </div>
+        ))}
       </div>
-
-      {loading && <p>Loading consoles...</p>}
-      {error && <p>Error loading consoles.</p>}
-      {data && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {data.consolesByCategory.map((console) => (
-            <ConsoleCard key={console.consoleId} console={console} />
-          ))}
-        </div>
-      )}
     </div>
   );
 }

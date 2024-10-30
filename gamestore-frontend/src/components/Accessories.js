@@ -1,50 +1,57 @@
 // src/components/Accessories.js
 
-import React, { useState } from 'react';
-import { useQuery, gql } from '@apollo/client';
-import AccessoryCard from './AccessoryCard';
+import React, { useContext } from 'react';
+import { useParams } from 'react-router-dom';
+import { gql, useQuery } from '@apollo/client';
+import { CartContext } from '../contexts/CartContext';
 
-const GET_ACCESSORIES_BY_SUBCATEGORY = gql`
-  query GetAccessoriesBySubCategory($subCategory: String) {
+const ACCESSORIES_QUERY = gql`
+  query GetAccessories($subCategory: String) {
     accessoriesBySubCategory(subCategory: $subCategory) {
       accessoryId
       name
       description
       price
+      category
+      subCategory
     }
   }
 `;
 
 function Accessories() {
-  const [subCategory, setSubCategory] = useState(null);
-
-  const { loading, error, data } = useQuery(GET_ACCESSORIES_BY_SUBCATEGORY, {
+  const { subCategory } = useParams();
+  const { loading, error, data } = useQuery(ACCESSORIES_QUERY, {
     variables: { subCategory },
-    skip: !subCategory,
   });
+  const { addToCart } = useContext(CartContext);
 
-  const handleSubCategoryClick = (selectedSubCategory) => {
-    setSubCategory(selectedSubCategory);
-  };
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error fetching accessories</p>;
+
+  const accessories = data.accessoriesBySubCategory;
 
   return (
-    <div className="max-w-screen-xl mx-auto p-4">
-      <h2 className="text-2xl font-semibold mb-4">Accessories</h2>
-      <div className="flex space-x-4 mb-6">
-        <button onClick={() => handleSubCategoryClick("T-Shirts")} className="btn-category">T-Shirts</button>
-        <button onClick={() => handleSubCategoryClick("Headsets")} className="btn-category">Headsets</button>
-        <button onClick={() => handleSubCategoryClick("Storage")} className="btn-category">Storage</button>
+    <div className="container mx-auto my-10 mt-24">
+      <h2 className="text-2xl font-bold mb-5">
+        {subCategory ? `${subCategory} Accessories` : 'All Accessories'}
+      </h2>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {accessories.map((accessory) => (
+          <div key={accessory.accessoryId} className="border p-4 rounded shadow">
+            <h3 className="text-xl font-semibold">{accessory.name}</h3>
+            <p className="text-gray-600">{accessory.description}</p>
+            <p className="text-gray-800">Category: {accessory.category}</p>
+            <p className="text-gray-800">Subcategory: {accessory.subCategory}</p>
+            <p className="text-gray-800 font-bold">Price: ${accessory.price.toFixed(2)}</p>
+            <button
+              onClick={() => addToCart({ ...accessory, quantity: 1 })}
+              className="mt-2 bg-primary text-white px-4 py-2 rounded"
+            >
+              Add to Cart
+            </button>
+          </div>
+        ))}
       </div>
-
-      {loading && <p>Loading accessories...</p>}
-      {error && <p>Error loading accessories.</p>}
-      {data && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {data.accessoriesBySubCategory.map((accessory) => (
-            <AccessoryCard key={accessory.accessoryId} accessory={accessory} />
-          ))}
-        </div>
-      )}
     </div>
   );
 }
